@@ -22,6 +22,18 @@ import org.apache.carbondata.core.datastore.chunk.store.DimensionChunkStoreFacto
 import org.apache.carbondata.core.scan.executor.infos.KeyStructureInfo;
 import org.apache.carbondata.core.scan.result.vector.CarbonColumnVector;
 import org.apache.carbondata.core.scan.result.vector.ColumnVectorInfo;
+import org.apache.carbondata.core.util.ByteUtil;
+
+import org.apache.spark.sql.types.BooleanType;
+import org.apache.spark.sql.types.DataType;
+import org.apache.spark.sql.types.Decimal;
+import org.apache.spark.sql.types.DecimalType;
+import org.apache.spark.sql.types.DoubleType;
+import org.apache.spark.sql.types.FloatType;
+import org.apache.spark.sql.types.IntegerType;
+import org.apache.spark.sql.types.LongType;
+import org.apache.spark.sql.types.ShortType;
+import org.apache.spark.sql.types.StringType;
 
 /**
  * This class is gives access to variable length dimension data chunk store
@@ -109,7 +121,34 @@ public class VariableLengthDimensionDataChunk extends AbstractDimensionDataChunk
     for (int i = offset; i < len; i++) {
       // Considering only String case now as we support only
       // string in no dictionary case at present.
+<<<<<<< HEAD
       dataChunkStore.fillRow(i, vector, vectorOffset++);
+=======
+      if (value == null || Arrays.equals(CarbonCommonConstants.MEMBER_DEFAULT_VAL_ARRAY, value)) {
+        vector.putNull(vectorOffset++);
+      } else {
+        DataType dt = vector.getType();
+        if (dt instanceof StringType) {
+          vector.putBytes(vectorOffset++, value);
+        } else if (dt instanceof BooleanType) {
+          vector.putBoolean(vectorOffset++, ByteUtil.toBoolean(value));
+        } else if (dt instanceof ShortType) {
+          vector.putShort(vectorOffset++, ByteUtil.toShort(value, 0, value.length));
+        } else if (dt instanceof IntegerType) {
+          vector.putInt(vectorOffset++, ByteUtil.toInt(value, 0, value.length));
+        } else if (dt instanceof FloatType) {
+          vector.putFloat(vectorOffset++, ByteUtil.toFloat(value, 0));
+        } else if (dt instanceof DoubleType) {
+          vector.putDouble(vectorOffset++, ByteUtil.toDouble(value, 0));
+        } else if (dt instanceof LongType) {
+          vector.putLong(vectorOffset++, ByteUtil.toLong(value, 0, value.length));
+        } else if (dt instanceof DecimalType) {
+          vector.putDecimal(vectorOffset++,
+              Decimal.apply(ByteUtil.toBigDecimal(value, 0, value.length)),
+              DecimalType.MAX_PRECISION());
+        }
+      }
+>>>>>>> 8843aecfe3f579344f80057a879e8f64baff53ed
     }
     return column + 1;
   }
@@ -133,7 +172,34 @@ public class VariableLengthDimensionDataChunk extends AbstractDimensionDataChunk
     for (int i = offset; i < len; i++) {
       // Considering only String case now as we support only
       // string in no dictionary case at present.
+<<<<<<< HEAD
       dataChunkStore.fillRow(rowMapping[i], vector, vectorOffset++);
+=======
+      if (value == null || Arrays.equals(CarbonCommonConstants.MEMBER_DEFAULT_VAL_ARRAY, value)) {
+        vector.putNull(vectorOffset++);
+      } else {
+        DataType dt = vector.getType();
+        if (dt instanceof StringType) {
+          vector.putBytes(vectorOffset++, value);
+        } else if (dt instanceof BooleanType) {
+          vector.putBoolean(vectorOffset++, ByteUtil.toBoolean(value));
+        } else if (dt instanceof ShortType) {
+          vector.putShort(vectorOffset++, ByteUtil.toShort(value, 0, value.length));
+        } else if (dt instanceof IntegerType) {
+          vector.putInt(vectorOffset++, ByteUtil.toInt(value, 0, value.length));
+        } else if (dt instanceof FloatType) {
+          vector.putFloat(vectorOffset++, ByteUtil.toFloat(value, 0));
+        } else if (dt instanceof DoubleType) {
+          vector.putDouble(vectorOffset++, ByteUtil.toDouble(value, 0));
+        } else if (dt instanceof LongType) {
+          vector.putLong(vectorOffset++, ByteUtil.toLong(value, 0, value.length));
+        } else if (dt instanceof DecimalType) {
+          vector.putDecimal(vectorOffset++,
+              Decimal.apply(ByteUtil.toBigDecimal(value, 0, value.length)),
+              DecimalType.MAX_PRECISION());
+        }
+      }
+>>>>>>> 8843aecfe3f579344f80057a879e8f64baff53ed
     }
     return column + 1;
   }

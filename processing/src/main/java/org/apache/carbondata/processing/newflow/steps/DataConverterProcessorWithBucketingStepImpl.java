@@ -177,13 +177,19 @@ public class DataConverterProcessorWithBucketingStepImpl extends AbstractDataLoa
     }
     CarbonTableIdentifier identifier =
         configuration.getTableIdentifier().getCarbonTableIdentifier();
-    BadRecordsLogger badRecordsLogger = new BadRecordsLogger(identifier.getBadRecordLoggerKey(),
+    return new BadRecordsLogger(identifier.getBadRecordLoggerKey(),
         identifier.getTableName() + '_' + System.currentTimeMillis(), getBadLogStoreLocation(
+<<<<<<< HEAD
         identifier.getDatabaseName() + CarbonCommonConstants.FILE_SEPARATOR + identifier
             .getTableName() + CarbonCommonConstants.FILE_SEPARATOR + configuration.getSegmentId()
             + CarbonCommonConstants.FILE_SEPARATOR + configuration.getTaskNo()),
         badRecordsLogRedirect, badRecordsLoggerEnable, badRecordConvertNullDisable, isDataLoadFail);
     return badRecordsLogger;
+=======
+        identifier.getDatabaseName() + File.separator + identifier.getTableName() + File.separator
+            + configuration.getTaskNo()), badRecordsLogRedirect, badRecordsLoggerEnable,
+        badRecordConvertNullDisable, isDataLoadFail);
+>>>>>>> 8843aecfe3f579344f80057a879e8f64baff53ed
   }
 
   private String getBadLogStoreLocation(String storeLocation) {
